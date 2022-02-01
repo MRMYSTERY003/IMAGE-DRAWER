@@ -1,0 +1,34 @@
+import cv2 
+coordinates = []
+
+scale_x,scale_y = .25,.25
+img_file_name = input('Enter your image file name with extension: ')
+
+
+img = cv2.imread(img_file_name)
+img = cv2.resize(img,(0,0),None,scale_x,scale_y)
+
+
+def click_event(event,x,y,flag,params):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        print(x,' ',y)
+        coordinates.append((x,y))
+    if event == cv2.EVENT_RBUTTONDOWN:
+        print(f'poping {x} and {y}')
+        #print('img:',img[y,x,:])
+        coordinates.pop()
+
+
+
+cv2.imshow('test',img)
+cv2.setMouseCallback('test',click_event)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+print(coordinates)
+file = input('enter the name the file: ')
+data = open(f'{file}.txt','w')
+for i in coordinates:
+    x,y = i
+    data.write(str(i)+'\n')
+print(f'all the coordinates are save in {file}')
+data.close()
